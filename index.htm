@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Mapa con radio</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <style>
+    html, body { height: 100%; margin: 0; }
+    #map { width: 100%; height: 100%; }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+  <script>
+    function getParam(name, defaultValue) {
+      const params = new URLSearchParams(window.location.search);
+      return parseFloat(params.get(name)) || defaultValue;
+    }
+
+    const lat = getParam("lat", 38.3451614);
+    const lng = getParam("lng", -0.4915487);
+    const radio = getParam("radio", 150); // Valor por defecto: 150 metros
+
+    const map = L.map('map').setView([lat, lng], 17);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+    }).addTo(map);
+
+    L.circle([lat, lng], {
+      radius: radio,
+      color: 'red',
+      fillColor: '#f03',
+      fillOpacity: 0.3
+    }).addTo(map).bindPopup(`Radio de ${radio} metros`);
+
+    L.marker([lat, lng]).addTo(map).bindPopup("Ubicación").openPopup();
+  </script>
+</body>
+</html>
